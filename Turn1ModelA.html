@@ -1,1 +1,105 @@
-T1MA
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paris Mice Population Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map, #growthChart, #heatmap, #sewerModel, #correlationGraph { 
+            height: 400px; width: 100%; margin: 10px 0; }
+        .container { padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Paris Mice Population Analysis</h1>
+    
+    <!-- Map of Paris with Mice Density -->
+    <div id="map"></div>
+
+    <!-- Growth Chart -->
+    <canvas id="growthChart"></canvas>
+
+    <!-- Heatmap of Restaurants -->
+    <div id="heatmap"></div>
+
+    <!-- 3D Sewer System Model -->
+    <div id="sewerModel"></div>
+
+    <!-- Correlation Graphs -->
+    <canvas id="correlationGraph"></canvas>
+</div>
+
+<script>
+    // Map initialization
+    var map = L.map('map').setView([48.8566, 2.3522], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Mock data for arrondissements (replace with actual data)
+    const arrondissementsData = {
+        '1': {density: 180, color: '#ff0000'},
+        '4': {density: 165, color: '#ff4500'},
+        // Add data for all 20 arrondissements
+    };
+
+    // Adding arrondissements to map with color coding
+    Object.keys(arrondissementsData).forEach(arr => {
+        // This would require actual geojson data for each arrondissement
+        L.geoJSON(/* geojson data here */).addTo(map).setStyle({fillColor: arrondissementsData[arr].color, fillOpacity: 0.5});
+    });
+
+    // Growth Chart
+    var ctx = document.getElementById('growthChart').getContext('2d');
+    var growthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 10}, (_, i) => 2014 + i),
+            datasets: [{
+                label: 'Mice Population',
+                data: [4, 4.5, 5, 5.7, 6.3, 7, 7.6, 8, 8.2, 8.5],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Heatmap - Placeholder for restaurant density
+    // This would typically involve another map or a different visualization tool
+    // For simplicity, imagine this as a static image or a div with colored blocks
+
+    // 3D Sewer System Model
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, 400);
+    document.getElementById('sewerModel').appendChild(renderer.domElement);
+    // Add 3D model here (this would require actual 3D modeling of sewers)
+
+    // Correlation Graph
+    var corrCtx = document.getElementById('correlationGraph').getContext('2d');
+    var corrChart = new Chart(corrCtx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Mice Population vs Restaurant Density',
+                data: [{x: 1, y: 180}, {x: 2, y: 165}], // Mock data points
+                borderColor: 'blue',
+                showLine: true
+            }]
+        },
+        options: { scales: { x: { type: 'linear' }, y: { type: 'linear' } } }
+    });
+
+    // Animation and interaction would need to be implemented with event listeners and additional scripting
+</script>
+
+</body>
+</html>
